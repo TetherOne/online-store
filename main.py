@@ -4,16 +4,13 @@ from fastapi import FastAPI
 import uvicorn
 
 
-
 app = FastAPI()
 
 
-
-@app.get('/')
+@app.get("/")
 def hello_world(request: Request):
-    return {'message': 'hello world'}
+    return {"message": "hello world"}
 
 
-
-if __name__ == '__main__':
-    uvicorn.run('main:app', reload=True)
+if __name__ == "__main__":
+    uvicorn.run("main:app", reload=True)
