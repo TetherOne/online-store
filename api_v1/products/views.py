@@ -2,7 +2,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.models.db_helper import db_helper
 
-from .schemas import ProductCreate, ProductUpdate, ProductUpdatePartial
+from .schemas import ProductUpdatePartial
+from .schemas import ProductCreate
+from .schemas import ProductUpdate
 from .schemas import Product
 
 from .dependencies import product_by_id

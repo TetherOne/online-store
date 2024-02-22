@@ -1,6 +1,9 @@
+from api_v1.products.schemas import ProductUpdatePartial
+from api_v1.products.schemas import ProductUpdate
+from api_v1.products.schemas import ProductCreate
+
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from api_v1.products.schemas import ProductCreate, ProductUpdate, ProductUpdatePartial
 from core.models import Product
 
 from sqlalchemy import Result
