@@ -9,7 +9,7 @@ from fastapi import Depends
 
 from starlette import status
 
-from .schemas import UserCreate
+from .schemas import UserCreate, UserUpdate
 from .schemas import User
 
 from . import crud
@@ -51,3 +51,17 @@ async def create_product(
 ):
 
     return await crud.create_user(session=session, product_in=product_in)
+
+
+@user_router.put("/{user_id}")
+async def update_user(
+    user_update: UserUpdate,
+    user: User = Depends(user_by_id),
+    session: AsyncSession = Depends(db_helper.scoped_session_dependency),
+):
+
+    return await crud.update_user(
+        session=session,
+        user=user,
+        user_update=user_update,
+    )
