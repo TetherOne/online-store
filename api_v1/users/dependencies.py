@@ -1,16 +1,17 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.models.db_helper import db_helper
-from core.models import User
-from typing import Annotated
 
 from fastapi import HTTPException
 from fastapi import Depends
 from fastapi import status
 from fastapi import Path
 
-from . import crud
+from core.models import User
 
+from typing import Annotated
+
+from . import crud
 
 
 async def user_by_id(
@@ -25,8 +26,6 @@ async def user_by_id(
         return user
 
     raise HTTPException(
-
         status_code=status.HTTP_404_NOT_FOUND,
         detail=f'User {user_id} not found',
-
     )
