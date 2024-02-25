@@ -15,6 +15,6 @@ if TYPE_CHECKING:
 
 class Profile(Base):
 
-    city: Mapped[str]
+    city: Mapped[str] = mapped_column(nullable=True)
     user_id: Mapped[int] = mapped_column(ForeignKey('users.id'), unique=True)
     user: Mapped['User'] = relationship(back_populates='profile')

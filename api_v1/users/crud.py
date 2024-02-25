@@ -27,10 +27,10 @@ async def get_user(
 
 async def create_user(
     session: AsyncSession,
-    product_in: UserCreate,
+    user_in: UserCreate,
 ) -> User:
 
-    user = User(**product_in.model_dump())
+    user = User(**user_in.model_dump())
 
     session.add(user)
     await session.commit()

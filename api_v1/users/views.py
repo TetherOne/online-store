@@ -1,5 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from core.models import Profile
 from core.models.db_helper import db_helper
 
 from .dependencies import user_by_id
@@ -9,7 +10,9 @@ from fastapi import Depends
 
 from starlette import status
 
-from .schemas import UserCreate, UserUpdate, UserUpdatePartial
+from .schemas import UserUpdatePartial
+from .schemas import UserUpdate
+from .schemas import UserCreate
 from .schemas import User
 
 from . import crud
@@ -45,12 +48,18 @@ async def get_user(
     response_model=User,
     status_code=status.HTTP_201_CREATED,
 )
-async def create_product(
-    product_in: UserCreate,
-    session: AsyncSession = Depends(db_helper.scoped_session_dependency),
+async def create_user(
+        user_in: UserCreate,
+        session: AsyncSession = Depends(db_helper.scoped_session_dependency),
 ):
 
-    return await crud.create_user(session=session, product_in=product_in)
+    user = await crud.create_user(session=session, user_in=user_in)
+
+    profile = Profile(user_id=user.id)
+    session.add(profile)
+    await session.commit()
+
+    return user
 
 
 @user_router.put("/{user_id}")
