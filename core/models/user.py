@@ -2,11 +2,11 @@ from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped
 
+from core.models.base import Base
+
 from typing import TYPE_CHECKING
 
 from sqlalchemy import String
-
-from core.models.base import Base
 
 
 if TYPE_CHECKING:

@@ -1,6 +1,8 @@
-from sqlalchemy.ext.asyncio import AsyncSession
+from api_v1.users.schemas import UserUpdatePartial
+from api_v1.users.schemas import UserCreate
+from api_v1.users.schemas import UserUpdate
 
-from api_v1.users.schemas import UserCreate, UserUpdatePartial, UserUpdate
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from sqlalchemy import Result
 from sqlalchemy import select
@@ -8,7 +10,9 @@ from sqlalchemy import select
 from core.models import User
 
 
-async def get_users(session: AsyncSession) -> list[User]:
+async def get_users(
+    session: AsyncSession,
+) -> list[User]:
 
     stmt = select(User).order_by(User.id)
     result: Result = await session.execute(stmt)

@@ -50,6 +50,7 @@ async def update_product(
 
     for name, value in product_update.model_dump(exclude_unset=partial).items():
         setattr(product, name, value)
+
     await session.commit()
 
     return product

@@ -1,19 +1,20 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from core.models import Profile
 from core.models.db_helper import db_helper
-
-from .dependencies import user_by_id
-
-from fastapi import APIRouter
-from fastapi import Depends
-
-from starlette import status
 
 from .schemas import UserUpdatePartial
 from .schemas import UserUpdate
 from .schemas import UserCreate
 from .schemas import User
+
+from .dependencies import user_by_id
+
+from core.models import Profile
+
+from fastapi import APIRouter
+from fastapi import Depends
+
+from starlette import status
 
 from . import crud
 
@@ -49,11 +50,14 @@ async def get_user(
     status_code=status.HTTP_201_CREATED,
 )
 async def create_user(
-        user_in: UserCreate,
-        session: AsyncSession = Depends(db_helper.scoped_session_dependency),
+    user_in: UserCreate,
+    session: AsyncSession = Depends(db_helper.scoped_session_dependency),
 ):
 
-    user = await crud.create_user(session=session, user_in=user_in)
+    user = await crud.create_user(
+        session=session,
+        user_in=user_in,
+    )
 
     profile = Profile(user_id=user.id)
     session.add(profile)
