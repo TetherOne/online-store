@@ -9,7 +9,7 @@ from fastapi import Depends
 
 from starlette import status
 
-from .schemas import UserCreate, UserUpdate
+from .schemas import UserCreate, UserUpdate, UserUpdatePartial
 from .schemas import User
 
 from . import crud
@@ -64,4 +64,19 @@ async def update_user(
         session=session,
         user=user,
         user_update=user_update,
+    )
+
+
+@user_router.patch("/{user_id}")
+async def update_product_partial(
+    user_update: UserUpdatePartial,
+    user: User = Depends(user_by_id),
+    session: AsyncSession = Depends(db_helper.scoped_session_dependency),
+):
+
+    return await crud.update_user(
+        session=session,
+        user=user,
+        user_update=user_update,
+        partial=True,
     )
