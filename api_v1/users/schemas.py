@@ -26,7 +26,4 @@ class UserUpdate(UserCreate):
 
 class UserUpdatePartial(UserCreate):
 
-    name: str | None = None
-    description: str | None = None
-    count: int | None = None
-    price: int | None = None
+    username: str | None = None
