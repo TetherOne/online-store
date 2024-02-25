@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from api_v1.users.schemas import UserCreate
+from api_v1.users.schemas import UserCreate, UserUpdatePartial, UserUpdate
 
 from sqlalchemy import Result
 from sqlalchemy import select
@@ -33,6 +33,20 @@ async def create_user(
     user = User(**product_in.model_dump())
 
     session.add(user)
+    await session.commit()
+
+    return user
+
+
+async def update_user(
+    session: AsyncSession,
+    user: User,
+    user_update: UserUpdate | UserUpdatePartial,
+    partial: bool = False,
+) -> User:
+
+    for name, value in user_update.model_dump(exclude_unset=partial).items():
+        setattr(user, name, value)
     await session.commit()
 
     return user
