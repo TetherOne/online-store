@@ -1,17 +1,23 @@
-from fastapi import Depends
-from fastapi_users_db_sqlalchemy import SQLAlchemyBaseUserTable, SQLAlchemyUserDatabase
+from fastapi_users_db_sqlalchemy import SQLAlchemyBaseUserTable
+from fastapi_users_db_sqlalchemy import SQLAlchemyUserDatabase
+
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from ..config import async_session_maker
+
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped
 
 from core.models.base import Base
 
-from typing import TYPE_CHECKING, AsyncGenerator
+from typing import AsyncGenerator
+from typing import TYPE_CHECKING
 
 from sqlalchemy import String
 
-from ..config import async_session_maker
+from fastapi import Depends
+
 
 if TYPE_CHECKING:
     from .profile import Profile
@@ -33,7 +39,6 @@ async def get_async_session() -> AsyncGenerator[AsyncSession, None]:
         if session:
             await session.close()
         raise
-
 
 
 async def get_user_db(session: AsyncSession = Depends(get_async_session)):
