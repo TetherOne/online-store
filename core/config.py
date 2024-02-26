@@ -1,4 +1,5 @@
 from pydantic_settings import BaseSettings
+from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 
 
 class Settings(BaseSettings):
@@ -9,3 +10,6 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
+
+engine = create_async_engine(settings.db_url)
+async_session_maker = async_sessionmaker(engine)
