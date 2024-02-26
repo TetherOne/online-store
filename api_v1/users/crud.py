@@ -1,5 +1,4 @@
 from api_v1.users.schemas import UserUpdatePartial
-from api_v1.users.schemas import UserCreate
 from api_v1.users.schemas import UserUpdate
 
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -27,19 +26,6 @@ async def get_user(
 ) -> User | None:
 
     return await session.get(User, user_id)
-
-
-async def create_user(
-    session: AsyncSession,
-    user_in: UserCreate,
-) -> User:
-
-    user = User(**user_in.model_dump())
-
-    session.add(user)
-    await session.commit()
-
-    return user
 
 
 async def update_user(

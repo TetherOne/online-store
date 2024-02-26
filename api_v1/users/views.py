@@ -4,12 +4,9 @@ from core.models.db_helper import db_helper
 
 from .schemas import UserUpdatePartial
 from .schemas import UserUpdate
-from .schemas import UserCreate
 from .schemas import User
 
 from .dependencies import user_by_id
-
-from core.models import Profile
 
 from fastapi import APIRouter
 from fastapi import Depends
@@ -40,28 +37,6 @@ async def get_users(
 async def get_user(
     user: User = Depends(user_by_id),
 ):
-
-    return user
-
-
-@user_router.post(
-    "/",
-    response_model=User,
-    status_code=status.HTTP_201_CREATED,
-)
-async def create_user(
-    user_in: UserCreate,
-    session: AsyncSession = Depends(db_helper.scoped_session_dependency),
-):
-
-    user = await crud.create_user(
-        session=session,
-        user_in=user_in,
-    )
-
-    profile = Profile(user_id=user.id)
-    session.add(profile)
-    await session.commit()
 
     return user
 

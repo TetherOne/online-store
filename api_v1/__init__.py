@@ -4,7 +4,7 @@ from core.models import User
 from api_v1.users.views import user_router
 from api_v1.users.auth import auth_backend
 from api_v1.users.manager import get_user_manager
-from api_v1.users.auth_schemas import UserRead, UserCreate
+from api_v1.users.schemas import UserRead, UserCreate
 from .products.views import router as products_router
 
 router = APIRouter()
