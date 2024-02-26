@@ -30,14 +30,20 @@ class User(Base, SQLAlchemyBaseUserTable[int]):
 
 
 async def get_async_session() -> AsyncGenerator[AsyncSession, None]:
+
     session = None
+
     try:
         async with async_session_maker() as s:
+
             session = s
             yield session
+
     except GeneratorExit:
+
         if session:
             await session.close()
+
         raise
 
 

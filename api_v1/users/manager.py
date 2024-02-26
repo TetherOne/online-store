@@ -1,10 +1,14 @@
-from core.models.user import get_user_db, get_async_session
+from core.models.user import get_async_session
+
+from core.models.user import get_user_db
 
 from fastapi_users import BaseUserManager
 from fastapi_users import IntegerIDMixin
 from fastapi_users import exceptions
 from fastapi_users import schemas
 from fastapi_users import models
+
+from config import SECRET_KEY_MANAGER
 
 from core.models import Profile
 from core.models import User
@@ -15,16 +19,13 @@ from fastapi import Request
 from typing import Optional
 
 
-
-SECRET = "SECRET-KEY-MANAGER"
-
+SECRET = SECRET_KEY_MANAGER
 
 
 class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
 
     reset_password_token_secret = SECRET
     verification_token_secret = SECRET
-
 
     async def on_after_register(self, user: User, request: Optional[Request] = None):
 
@@ -34,7 +35,6 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
         session.add(profile)
 
         await session.commit()
-
 
     async def create(
         self,

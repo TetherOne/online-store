@@ -4,7 +4,6 @@ from sqlalchemy.orm import declared_attr
 from sqlalchemy.orm import Mapped
 
 
-
 class Base(DeclarativeBase):
     __abstract__ = True
 

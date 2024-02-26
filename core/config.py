@@ -3,11 +3,17 @@ from sqlalchemy.ext.asyncio import async_sessionmaker
 
 from pydantic_settings import BaseSettings
 
+from config import DB_USER
+from config import DB_HOST
+from config import DB_PORT
+from config import DB_NAME
+from config import DB_PASS
+
 
 class Settings(BaseSettings):
 
     api_v1_prefix: str = '/api/v1'
-    db_url: str = f'postgresql+asyncpg://postgres:qwerty@127.0.0.1:5432/online_store_db'
+    db_url: str = f'postgresql+asyncpg://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
     db_echo: bool = False
 
 
