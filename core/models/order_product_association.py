@@ -1,6 +1,11 @@
-from sqlalchemy import Table, Column, ForeignKey, Integer, UniqueConstraint
+from sqlalchemy import UniqueConstraint
+from sqlalchemy import ForeignKey
+from sqlalchemy import Integer
+from sqlalchemy import Column
+from sqlalchemy import Table
 
-from core.models import Base
+
+from core.models.base import Base
 
 
 order_product_association_table = Table(

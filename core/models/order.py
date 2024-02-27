@@ -1,10 +1,16 @@
+from core.models.order_product_association import order_product_association_table
+from core.models.base import Base
+
+from typing_extensions import TYPE_CHECKING
+
+from sqlalchemy.orm import mapped_column
+from sqlalchemy.orm import relationship
+from sqlalchemy.orm import Mapped
+
 from datetime import datetime
 
 from sqlalchemy import func
-from sqlalchemy.orm import Mapped, mapped_column, relationship
-from typing_extensions import TYPE_CHECKING
 
-from core.models import Base, order_product_association_table
 
 if TYPE_CHECKING:
     from .product import Product
