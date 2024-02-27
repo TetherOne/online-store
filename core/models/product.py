@@ -1,10 +1,11 @@
 from core.models import order_product_association_table
-from core.models.base import Base
 
 from typing_extensions import TYPE_CHECKING
 
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped
+
+from core.models.base import Base
 
 
 if TYPE_CHECKING:
