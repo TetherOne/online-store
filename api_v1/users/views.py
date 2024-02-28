@@ -16,10 +16,10 @@ from starlette import status
 from . import crud
 
 
-user_router = APIRouter(tags=["Users"])
+router = APIRouter(tags=["Users"])
 
 
-@user_router.get(
+@router.get(
     "/",
     response_model=list[User],
 )
@@ -30,7 +30,7 @@ async def get_users(
     return await crud.get_users(session=session)
 
 
-@user_router.get(
+@router.get(
     "/{user_id}",
     response_model=User,
 )
@@ -41,7 +41,7 @@ async def get_user(
     return user
 
 
-@user_router.put("/{user_id}")
+@router.put("/{user_id}")
 async def update_user(
     user_update: UserUpdate,
     user: User = Depends(user_by_id),
@@ -55,7 +55,7 @@ async def update_user(
     )
 
 
-@user_router.patch("/{user_id}")
+@router.patch("/{user_id}")
 async def update_user_partial(
     user_update: UserUpdatePartial,
     user: User = Depends(user_by_id),
@@ -70,7 +70,7 @@ async def update_user_partial(
     )
 
 
-@user_router.delete(
+@router.delete(
     "/{user_id}",
     status_code=status.HTTP_204_NO_CONTENT,
 )
