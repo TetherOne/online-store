@@ -1,11 +1,17 @@
-from typing import Annotated
-
-from fastapi import Path, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from api_v1.profiles import crud
-from core.models import Profile
 from core.models.db_helper import db_helper
+
+from fastapi import HTTPException
+from fastapi import Depends
+from fastapi import status
+from fastapi import Path
+
+from api_v1.profiles import crud
+
+from core.models import Profile
+
+from typing import Annotated
 
 
 async def profile_by_id(

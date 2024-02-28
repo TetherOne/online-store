@@ -1,8 +1,12 @@
-from sqlalchemy import select, Result
+from api_v1.profiles.schemas import ProfileUpdatePartial
+from api_v1.profiles.schemas import ProfileUpdate
+
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from api_v1.profiles.schemas import ProfileUpdate, ProfileUpdatePartial
 from core.models import Profile
+
+from sqlalchemy import select
+from sqlalchemy import Result
 
 
 async def get_profiles(

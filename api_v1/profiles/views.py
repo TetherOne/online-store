@@ -1,11 +1,19 @@
-from fastapi import APIRouter, Depends
-from fastapi import status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from api_v1.profiles import crud
-from .dependencies import profile_by_id
-from .schemas import Profile, ProfileUpdatePartial, ProfileUpdate
+from .schemas import ProfileUpdatePartial
+from .schemas import ProfileUpdate
+from .schemas import Profile
+
+from fastapi import APIRouter
+from fastapi import Depends
+from fastapi import status
+
 from core.models.db_helper import db_helper
+
+from .dependencies import profile_by_id
+
+from api_v1.profiles import crud
+
 
 router = APIRouter(tags=["Profiles"])
 
