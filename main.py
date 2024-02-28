@@ -1,4 +1,5 @@
 from api_v1 import router as router_v1
+
 from core.config import settings
 
 from fastapi import Request
