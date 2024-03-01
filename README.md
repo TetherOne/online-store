@@ -9,7 +9,7 @@
     Онлайн магазин
     ...
 
-![Image alt](https://github.com/TetherOne/online_store/raw/master/github-pages/img.png)
+![Image alt](https://github.com/TetherOne/online_store/raw/master/github-pages/img_2.png)
 
 
 
