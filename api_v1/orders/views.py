@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from api_v1.orders import crud
 from api_v1.orders.dependencies import order_by_id
-from api_v1.orders.schemas import Order
+from api_v1.orders.schemas import Order, OrderUpdatePartial
 
 from core.models.db_helper import db_helper
 
@@ -65,3 +65,20 @@ async def delete_order(
     await cache_backend.clear()
 
     await crud.delete_order(session=session, order_id=order_id)
+
+
+@router.patch("/{order_id}")
+async def update_order_partial(
+    order_update: OrderUpdatePartial,
+    order: Order = Depends(order_by_id),
+    session: AsyncSession = Depends(db_helper.scoped_session_dependency),
+):
+
+    cache_backend = FastAPICache.get_backend()
+    await cache_backend.clear()
+
+    return await crud.update_order(
+        session=session,
+        order=order,
+        order_update=order_update,
+    )

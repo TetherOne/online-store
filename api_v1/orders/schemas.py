@@ -6,12 +6,12 @@ from pydantic import BaseModel
 class OrderBase(BaseModel):
 
     promocode: str
-    created_at: datetime
 
 
 class Order(OrderBase):
 
     id: int
+    created_at: datetime
 
 
 class OrderCreate(OrderBase):
