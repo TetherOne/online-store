@@ -1,4 +1,5 @@
 from fastapi import status, Depends, APIRouter
+from fastapi_cache import FastAPICache
 from fastapi_cache.decorator import cache
 
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -49,3 +50,18 @@ async def get_orders(
 ):
 
     return await crud.get_orders(session=session)
+
+
+@router.delete(
+    "/{order_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+)
+async def delete_order(
+    order_id: int,
+    session: AsyncSession = Depends(db_helper.scoped_session_dependency),
+):
+
+    cache_backend = FastAPICache.get_backend()
+    await cache_backend.clear()
+
+    await crud.delete_order(session=session, order_id=order_id)
