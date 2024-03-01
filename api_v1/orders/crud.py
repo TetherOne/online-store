@@ -13,3 +13,11 @@ async def get_orders(
     orders = result.scalars().all()
 
     return list(orders)
+
+
+async def get_order(
+    session: AsyncSession,
+    order_id: int,
+) -> Order | None:
+
+    return await session.get(Order, order_id)
