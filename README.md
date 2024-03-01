@@ -6,14 +6,35 @@
 # Описание проекта
 
 
-    Онлайн магазин
-    ...
+    Написаны API для онлайн магазина. Взаимодейсвие с товарами,
+    профилями, пользователямиЮ заказами. Реализована регистрация,
+    аутентификация с использованием JWT, выход из системы.
 
 ![Image alt](https://github.com/TetherOne/online_store/raw/master/github-pages/img_2.png)
 
 
-
 # Техническая информация
 
-  - FastAPI
-  - Pydantic
+  - Валидация: Pydantic
+  - Создание миграций: Alembic
+  - Взаимодействие с бд: асинхронная SQLAlchemy 2.0
+  - База данных: PostgreSQL + асинхронный движок asyncpg
+
+# Запуск проекта
+
+## 1. Клонируйте репозиторий:
+```
+git clone https://github.com/TetherOne/head-hunter
+```
+## 2. Соберите docker-compose:
+```
+docker compose build
+```
+## 3. Запустите docker-compose:
+```
+docker compose up
+```
+## 4. Перейдите в браузер по ссылке:
+```
+http://127.0.0.1:8000/docs
+```
