@@ -1,8 +1,8 @@
-from fastapi_cache import FastAPICache
-from fastapi_cache.decorator import cache
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.models.db_helper import db_helper
+
+from fastapi_cache.decorator import cache
 
 from .schemas import ProductUpdatePartial
 from .schemas import ProductCreate
@@ -26,7 +26,6 @@ router = APIRouter(tags=["Products"])
     response_model=list[Product],
     status_code=status.HTTP_200_OK,
 )
-@cache(60)
 async def get_products(
     session: AsyncSession = Depends(db_helper.scoped_session_dependency),
 ):
@@ -44,9 +43,6 @@ async def create_product(
     session: AsyncSession = Depends(db_helper.scoped_session_dependency),
 ):
 
-    cache_backend = FastAPICache.get_backend()
-    await cache_backend.clear()
-
     return await crud.create_product(session=session, product_in=product_in)
 
 
@@ -55,7 +51,6 @@ async def create_product(
     response_model=Product,
     status_code=status.HTTP_200_OK,
 )
-@cache(60)
 async def get_product(
     product: Product = Depends(product_by_id),
 ):
@@ -70,9 +65,6 @@ async def update_product(
     session: AsyncSession = Depends(db_helper.scoped_session_dependency),
 ):
 
-    cache_backend = FastAPICache.get_backend()
-    await cache_backend.clear()
-
     return await crud.update_product(
         session=session,
         product=product,
@@ -86,9 +78,6 @@ async def update_product_partial(
     product: Product = Depends(product_by_id),
     session: AsyncSession = Depends(db_helper.scoped_session_dependency),
 ):
-
-    cache_backend = FastAPICache.get_backend()
-    await cache_backend.clear()
 
     return await crud.update_product(
         session=session,
@@ -106,9 +95,6 @@ async def delete_product(
     product: Product = Depends(product_by_id),
     session: AsyncSession = Depends(db_helper.scoped_session_dependency),
 ) -> None:
-
-    cache_backend = FastAPICache.get_backend()
-    await cache_backend.clear()
 
     await crud.delete_product(
         session=session,
