@@ -9,6 +9,8 @@ from api_v1.users.auth import auth_backend
 
 from api_v1.users.views import router as users_router
 from api_v1.profiles.views import router as profiles_router
+from api_v1.orders.views import router as orders_router
+
 from fastapi_users import FastAPIUsers
 
 from fastapi import APIRouter
@@ -22,6 +24,8 @@ router = APIRouter()
 router.include_router(router=products_router, prefix='/products')
 router.include_router(router=users_router, prefix='/users')
 router.include_router(router=profiles_router, prefix='/profiles')
+router.include_router(router=orders_router, prefix='/orders')
+
 
 
 fastapi_users = FastAPIUsers[User, int](
