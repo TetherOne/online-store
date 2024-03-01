@@ -1,4 +1,5 @@
 from fastapi import status, Depends, APIRouter
+from fastapi_cache.decorator import cache
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -17,6 +18,7 @@ router = APIRouter(tags=["Orders"])
     response_model=list[Order],
     status_code=status.HTTP_200_OK,
 )
+@cache(60)
 async def get_orders(
     session: AsyncSession = Depends(db_helper.scoped_session_dependency),
 ):
@@ -29,6 +31,7 @@ async def get_orders(
     response_model=Order,
     status_code=status.HTTP_200_OK,
 )
+@cache(60)
 async def get_order(
     order: Order = Depends(order_by_id),
 ):

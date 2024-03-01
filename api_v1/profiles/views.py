@@ -1,3 +1,5 @@
+from fastapi_cache import FastAPICache
+from fastapi_cache.decorator import cache
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from .schemas import ProfileUpdatePartial
@@ -23,6 +25,7 @@ router = APIRouter(tags=["Profiles"])
     response_model=list[Profile],
     status_code=status.HTTP_200_OK,
 )
+@cache(60)
 async def get_profiles(
     session: AsyncSession = Depends(db_helper.scoped_session_dependency),
 ):
@@ -35,6 +38,7 @@ async def get_profiles(
     response_model=Profile,
     status_code=status.HTTP_200_OK,
 )
+@cache(60)
 async def get_product(
     profile: Profile = Depends(profile_by_id),
 ):
@@ -49,6 +53,9 @@ async def update_product(
     session: AsyncSession = Depends(db_helper.scoped_session_dependency),
 ):
 
+    cache_backend = FastAPICache.get_backend()
+    await cache_backend.clear()
+
     return await crud.update_profile(
         session=session,
         profile=profile,
@@ -62,6 +69,9 @@ async def update_product_partial(
     profile: Profile = Depends(profile_by_id),
     session: AsyncSession = Depends(db_helper.scoped_session_dependency),
 ):
+
+    cache_backend = FastAPICache.get_backend()
+    await cache_backend.clear()
 
     return await crud.update_profile(
         session=session,
