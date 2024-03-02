@@ -19,7 +19,7 @@
   - Валидация Pydantic
   - Кеширование Redis
   - Миграции Alembic
-  - SQLAlchemy
+  - ORM SQLAlchemy
   - База данных PostgreSQL + asyncpg
 
 # Запуск проекта
