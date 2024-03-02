@@ -1,3 +1,6 @@
+from fastapi_cache import FastAPICache
+from fastapi_cache.decorator import cache
+
 from api_v1.orders.schemas import OrderUpdatePartial
 from api_v1.orders.schemas import Order
 
@@ -22,6 +25,7 @@ router = APIRouter(tags=["Orders"])
     response_model=list[Order],
     status_code=status.HTTP_200_OK,
 )
+@cache(namespace='store', expire=60)
 async def get_orders(
     session: AsyncSession = Depends(db_helper.scoped_session_dependency),
 ):
@@ -34,23 +38,12 @@ async def get_orders(
     response_model=Order,
     status_code=status.HTTP_200_OK,
 )
+@cache(namespace='store', expire=60)
 async def get_order(
     order: Order = Depends(order_by_id),
 ):
 
     return order
-
-
-@router.get(
-    "/",
-    response_model=list[Order],
-    status_code=status.HTTP_200_OK,
-)
-async def get_orders(
-    session: AsyncSession = Depends(db_helper.scoped_session_dependency),
-):
-
-    return await crud.get_orders(session=session)
 
 
 @router.delete(
@@ -62,6 +55,8 @@ async def delete_order(
     session: AsyncSession = Depends(db_helper.scoped_session_dependency),
 ):
 
+    await FastAPICache.clear(namespace='store')
+
     await crud.delete_order(session=session, order_id=order_id)
 
 
@@ -71,6 +66,8 @@ async def update_order_partial(
     order: Order = Depends(order_by_id),
     session: AsyncSession = Depends(db_helper.scoped_session_dependency),
 ):
+
+    await FastAPICache.clear(namespace='store')
 
     return await crud.update_order(
         session=session,

@@ -1,3 +1,5 @@
+from fastapi_cache import FastAPICache
+from fastapi_cache.decorator import cache
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.models.db_helper import db_helper
@@ -23,6 +25,7 @@ router = APIRouter(tags=["Users"])
     "/",
     response_model=list[User],
 )
+@cache(namespace='store', expire=60)
 async def get_users(
     session: AsyncSession = Depends(db_helper.scoped_session_dependency),
 ):
@@ -34,6 +37,7 @@ async def get_users(
     "/{user_id}",
     response_model=User,
 )
+@cache(namespace='store', expire=60)
 async def get_user(
     user: User = Depends(user_by_id),
 ):
@@ -48,6 +52,8 @@ async def update_user(
     session: AsyncSession = Depends(db_helper.scoped_session_dependency),
 ):
 
+    await FastAPICache.clear(namespace='store')
+
     return await crud.update_user(
         session=session,
         user=user,
@@ -61,6 +67,8 @@ async def update_user_partial(
     user: User = Depends(user_by_id),
     session: AsyncSession = Depends(db_helper.scoped_session_dependency),
 ):
+
+    await FastAPICache.clear(namespace='store')
 
     return await crud.update_user(
         session=session,
@@ -78,6 +86,8 @@ async def delete_user(
     user: User = Depends(user_by_id),
     session: AsyncSession = Depends(db_helper.scoped_session_dependency),
 ) -> None:
+
+    await FastAPICache.clear(namespace='store')
 
     await crud.delete_user(
         session=session,
