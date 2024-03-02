@@ -1,3 +1,5 @@
+from aiocache import Cache, cached
+from aiocache.serializers import PickleSerializer
 from fastapi_cache import FastAPICache
 from fastapi_cache.decorator import cache
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -20,12 +22,15 @@ from . import crud
 
 router = APIRouter(tags=["Users"])
 
+cache = Cache(Cache.REDIS, endpoint="127.0.0.1", port=6379, namespace='store')
+
+
 
 @router.get(
     "/",
     response_model=list[User],
 )
-@cache(namespace='store', expire=60)
+@cached(ttl=60, cache=Cache.REDIS, key="users", serializer=PickleSerializer(), namespace="store")
 async def get_users(
     session: AsyncSession = Depends(db_helper.scoped_session_dependency),
 ):
@@ -37,7 +42,7 @@ async def get_users(
     "/{user_id}",
     response_model=User,
 )
-@cache(namespace='store', expire=60)
+@cached(ttl=60, cache=Cache.REDIS, key="users", serializer=PickleSerializer(), namespace="store")
 async def get_user(
     user: User = Depends(user_by_id),
 ):
@@ -52,7 +57,7 @@ async def update_user(
     session: AsyncSession = Depends(db_helper.scoped_session_dependency),
 ):
 
-    await FastAPICache.clear(namespace='store')
+    await cache.delete("users")
 
     return await crud.update_user(
         session=session,
@@ -68,7 +73,7 @@ async def update_user_partial(
     session: AsyncSession = Depends(db_helper.scoped_session_dependency),
 ):
 
-    await FastAPICache.clear(namespace='store')
+    await cache.delete("users")
 
     return await crud.update_user(
         session=session,
@@ -87,7 +92,7 @@ async def delete_user(
     session: AsyncSession = Depends(db_helper.scoped_session_dependency),
 ) -> None:
 
-    await FastAPICache.clear(namespace='store')
+    await cache.delete("users")
 
     await crud.delete_user(
         session=session,

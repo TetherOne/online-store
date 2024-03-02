@@ -1,3 +1,5 @@
+from aiocache import Cache, cached
+from aiocache.serializers import PickleSerializer
 from fastapi_cache import FastAPICache
 from fastapi_cache.decorator import cache
 
@@ -19,13 +21,15 @@ from fastapi import status
 
 router = APIRouter(tags=["Orders"])
 
+cache = Cache(Cache.REDIS, endpoint="127.0.0.1", port=6379, namespace='store')
+
 
 @router.get(
     "/",
     response_model=list[Order],
     status_code=status.HTTP_200_OK,
 )
-@cache(namespace='store', expire=60)
+@cached(ttl=60, cache=Cache.REDIS, key="orders", serializer=PickleSerializer(), namespace="store")
 async def get_orders(
     session: AsyncSession = Depends(db_helper.scoped_session_dependency),
 ):
@@ -38,7 +42,7 @@ async def get_orders(
     response_model=Order,
     status_code=status.HTTP_200_OK,
 )
-@cache(namespace='store', expire=60)
+@cached(ttl=60, cache=Cache.REDIS, key="orders", serializer=PickleSerializer(), namespace="store")
 async def get_order(
     order: Order = Depends(order_by_id),
 ):
@@ -55,7 +59,7 @@ async def delete_order(
     session: AsyncSession = Depends(db_helper.scoped_session_dependency),
 ):
 
-    await FastAPICache.clear(namespace='store')
+    await cache.delete("orders")
 
     await crud.delete_order(session=session, order_id=order_id)
 
@@ -67,7 +71,7 @@ async def update_order_partial(
     session: AsyncSession = Depends(db_helper.scoped_session_dependency),
 ):
 
-    await FastAPICache.clear(namespace='store')
+    await cache.delete("orders")
 
     return await crud.update_order(
         session=session,

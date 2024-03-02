@@ -1,4 +1,6 @@
-from fastapi_cache import FastAPICache
+from aiocache import cached, Cache
+from aiocache.serializers import PickleSerializer
+
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.models.db_helper import db_helper
@@ -21,13 +23,15 @@ from . import crud
 
 router = APIRouter(tags=["Products"])
 
+cache = Cache(Cache.REDIS, endpoint="127.0.0.1", port=6379, namespace='store')
+
 
 @router.get(
     "/",
     response_model=list[Product],
     status_code=status.HTTP_200_OK,
 )
-@cache(namespace='store', expire=60)
+@cached(ttl=60, cache=Cache.REDIS, key="products", serializer=PickleSerializer(), namespace="store")
 async def get_products(
     session: AsyncSession = Depends(db_helper.scoped_session_dependency),
 ):
@@ -45,9 +49,12 @@ async def create_product(
     session: AsyncSession = Depends(db_helper.scoped_session_dependency),
 ):
 
-    await FastAPICache.clear(namespace='store')
+    await cache.delete("products")
 
-    return await crud.create_product(session=session, product_in=product_in)
+    return await crud.create_product(
+        session=session,
+        product_in=product_in,
+    )
 
 
 @router.get(
@@ -55,11 +62,10 @@ async def create_product(
     response_model=Product,
     status_code=status.HTTP_200_OK,
 )
-@cache(namespace='store', expire=60)
+@cached(ttl=60, cache=Cache.REDIS, key="products", serializer=PickleSerializer(), namespace="store")
 async def get_product(
     product: Product = Depends(product_by_id),
 ):
-
 
     return product
 
@@ -71,7 +77,7 @@ async def update_product(
     session: AsyncSession = Depends(db_helper.scoped_session_dependency),
 ):
 
-    await FastAPICache.clear(namespace='store')
+    await cache.delete("products")
 
     return await crud.update_product(
         session=session,
@@ -87,7 +93,7 @@ async def update_product_partial(
     session: AsyncSession = Depends(db_helper.scoped_session_dependency),
 ):
 
-    await FastAPICache.clear(namespace='store')
+    await cache.delete("products")
 
     return await crud.update_product(
         session=session,
@@ -106,7 +112,7 @@ async def delete_product(
     session: AsyncSession = Depends(db_helper.scoped_session_dependency),
 ) -> None:
 
-    await FastAPICache.clear(namespace='store')
+    await cache.delete("products")
 
     await crud.delete_product(
         session=session,

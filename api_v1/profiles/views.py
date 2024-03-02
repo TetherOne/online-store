@@ -1,3 +1,5 @@
+from aiocache import Cache, cached
+from aiocache.serializers import PickleSerializer
 from fastapi_cache import FastAPICache
 from fastapi_cache.decorator import cache
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -20,12 +22,15 @@ from api_v1.profiles import crud
 router = APIRouter(tags=["Profiles"])
 
 
+cache = Cache(Cache.REDIS, endpoint="127.0.0.1", port=6379, namespace='store')
+
+
 @router.get(
     "/",
     response_model=list[Profile],
     status_code=status.HTTP_200_OK,
 )
-@cache(namespace='store', expire=60)
+@cached(ttl=60, cache=Cache.REDIS, key="profiles", serializer=PickleSerializer(), namespace="store")
 async def get_profiles(
     session: AsyncSession = Depends(db_helper.scoped_session_dependency),
 ):
@@ -38,7 +43,7 @@ async def get_profiles(
     response_model=Profile,
     status_code=status.HTTP_200_OK,
 )
-@cache(namespace='store', expire=60)
+@cached(ttl=60, cache=Cache.REDIS, key="profiles", serializer=PickleSerializer(), namespace="store")
 async def get_product(
     profile: Profile = Depends(profile_by_id),
 ):
@@ -53,7 +58,7 @@ async def update_product(
     session: AsyncSession = Depends(db_helper.scoped_session_dependency),
 ):
 
-    await FastAPICache.clear(namespace='store')
+    await cache.delete("profiles")
 
     return await crud.update_profile(
         session=session,
@@ -69,7 +74,7 @@ async def update_product_partial(
     session: AsyncSession = Depends(db_helper.scoped_session_dependency),
 ):
 
-    await FastAPICache.clear(namespace='store')
+    await cache.delete("profiles")
 
     return await crud.update_profile(
         session=session,
