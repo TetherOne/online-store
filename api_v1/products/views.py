@@ -1,4 +1,3 @@
-from aiocache import cached, Cache
 from aiocache.serializers import PickleSerializer
 
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -14,16 +13,23 @@ from .schemas import Product
 
 from .dependencies import product_by_id
 
+from config import REDIS_PORT
+
 from fastapi import APIRouter
 from fastapi import Depends
 from fastapi import status
+
+from aiocache import cached
+from aiocache import Cache
 
 from . import crud
 
 
 router = APIRouter(tags=["Products"])
 
-cache = Cache(Cache.REDIS, endpoint="127.0.0.1", port=6379, namespace='store')
+
+cache = Cache(Cache.REDIS, endpoint="redis-store", port=REDIS_PORT, namespace='store')
+
 
 
 @router.get(

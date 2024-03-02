@@ -1,10 +1,10 @@
-from aiocache import Cache, cached
 from aiocache.serializers import PickleSerializer
-from fastapi_cache import FastAPICache
-from fastapi_cache.decorator import cache
+
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.models.db_helper import db_helper
+
+from fastapi_cache.decorator import cache
 
 from .schemas import UserUpdatePartial
 from .schemas import UserUpdate
@@ -12,8 +12,13 @@ from .schemas import User
 
 from .dependencies import user_by_id
 
+from config import REDIS_PORT
+
 from fastapi import APIRouter
 from fastapi import Depends
+
+from aiocache import cached
+from aiocache import Cache
 
 from starlette import status
 
@@ -22,8 +27,8 @@ from . import crud
 
 router = APIRouter(tags=["Users"])
 
-cache = Cache(Cache.REDIS, endpoint="127.0.0.1", port=6379, namespace='store')
 
+cache = Cache(Cache.REDIS, endpoint="redis-store", port=REDIS_PORT, namespace='store')
 
 
 @router.get(

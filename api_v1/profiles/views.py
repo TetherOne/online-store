@@ -1,8 +1,10 @@
-from aiocache import Cache, cached
 from aiocache.serializers import PickleSerializer
-from fastapi_cache import FastAPICache
-from fastapi_cache.decorator import cache
+
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from core.models.db_helper import db_helper
+
+from fastapi_cache.decorator import cache
 
 from .schemas import ProfileUpdatePartial
 from .schemas import ProfileUpdate
@@ -12,17 +14,20 @@ from fastapi import APIRouter
 from fastapi import Depends
 from fastapi import status
 
-from core.models.db_helper import db_helper
+from config import REDIS_PORT
 
 from .dependencies import profile_by_id
 
 from api_v1.profiles import crud
 
+from aiocache import cached
+from aiocache import Cache
+
 
 router = APIRouter(tags=["Profiles"])
 
 
-cache = Cache(Cache.REDIS, endpoint="127.0.0.1", port=6379, namespace='store')
+cache = Cache(Cache.REDIS, endpoint="redis-store", port=REDIS_PORT, namespace='store')
 
 
 @router.get(

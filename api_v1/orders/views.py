@@ -1,10 +1,8 @@
-from aiocache import Cache, cached
-from aiocache.serializers import PickleSerializer
-from fastapi_cache import FastAPICache
-from fastapi_cache.decorator import cache
-
 from api_v1.orders.schemas import OrderUpdatePartial
 from api_v1.orders.schemas import Order
+
+from aiocache.serializers import PickleSerializer
+from fastapi_cache.decorator import cache
 
 from api_v1.orders.dependencies import order_by_id
 
@@ -14,14 +12,20 @@ from core.models.db_helper import db_helper
 
 from api_v1.orders import crud
 
+from config import REDIS_PORT
+
 from fastapi import APIRouter
 from fastapi import Depends
 from fastapi import status
 
+from aiocache import cached
+from aiocache import Cache
+
 
 router = APIRouter(tags=["Orders"])
 
-cache = Cache(Cache.REDIS, endpoint="127.0.0.1", port=6379, namespace='store')
+
+cache = Cache(Cache.REDIS, endpoint="redis-store", port=REDIS_PORT, namespace='store')
 
 
 @router.get(
