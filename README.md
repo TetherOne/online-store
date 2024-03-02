@@ -26,7 +26,7 @@
 
 ## 1. Клонируйте репозиторий:
 ```
-git clone https://github.com/TetherOne/head-hunter
+git clone https://github.com/TetherOne/online-store
 ```
 ## 2. Соберите docker-compose:
 ```
@@ -40,4 +40,3 @@ docker compose up
 ```
 http://127.0.0.1:8000/docs
 ```
->>>>>>> 74ffab5fdf0143dc37919c4ce040545422326c0f
