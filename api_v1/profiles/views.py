@@ -27,7 +27,12 @@ from aiocache import Cache
 router = APIRouter(tags=["Profiles"])
 
 
-cache = Cache(Cache.REDIS, endpoint="redis-store", port=REDIS_PORT, namespace='store')
+cache = Cache(
+    Cache.REDIS,
+    endpoint="redis-store",
+    port=REDIS_PORT,
+    namespace="store",
+)
 
 
 @router.get(
@@ -35,7 +40,13 @@ cache = Cache(Cache.REDIS, endpoint="redis-store", port=REDIS_PORT, namespace='s
     response_model=list[Profile],
     status_code=status.HTTP_200_OK,
 )
-@cached(ttl=60, cache=Cache.REDIS, key="profiles", serializer=PickleSerializer(), namespace="store")
+@cached(
+    ttl=60,
+    cache=Cache.REDIS,
+    key="profiles",
+    serializer=PickleSerializer(),
+    namespace="store",
+)
 async def get_profiles(
     session: AsyncSession = Depends(db_helper.scoped_session_dependency),
 ):
@@ -48,7 +59,13 @@ async def get_profiles(
     response_model=Profile,
     status_code=status.HTTP_200_OK,
 )
-@cached(ttl=60, cache=Cache.REDIS, key="profiles", serializer=PickleSerializer(), namespace="store")
+@cached(
+    ttl=60,
+    cache=Cache.REDIS,
+    key="profiles",
+    serializer=PickleSerializer(),
+    namespace="store",
+)
 async def get_product(
     profile: Profile = Depends(profile_by_id),
 ):

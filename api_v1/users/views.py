@@ -28,14 +28,25 @@ from . import crud
 router = APIRouter(tags=["Users"])
 
 
-cache = Cache(Cache.REDIS, endpoint="redis-store", port=REDIS_PORT, namespace='store')
+cache = Cache(
+    Cache.REDIS,
+    endpoint="redis-store",
+    port=REDIS_PORT,
+    namespace="store",
+)
 
 
 @router.get(
     "/",
     response_model=list[User],
 )
-@cached(ttl=60, cache=Cache.REDIS, key="users", serializer=PickleSerializer(), namespace="store")
+@cached(
+    ttl=60,
+    cache=Cache.REDIS,
+    key="users",
+    serializer=PickleSerializer(),
+    namespace="store",
+)
 async def get_users(
     session: AsyncSession = Depends(db_helper.scoped_session_dependency),
 ):
@@ -47,7 +58,13 @@ async def get_users(
     "/{user_id}",
     response_model=User,
 )
-@cached(ttl=60, cache=Cache.REDIS, key="users", serializer=PickleSerializer(), namespace="store")
+@cached(
+    ttl=60,
+    cache=Cache.REDIS,
+    key="users",
+    serializer=PickleSerializer(),
+    namespace="store",
+)
 async def get_user(
     user: User = Depends(user_by_id),
 ):

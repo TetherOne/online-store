@@ -4,7 +4,6 @@ from sqlalchemy.ext.asyncio import async_sessionmaker
 from pydantic_settings import BaseSettings
 
 from config import DB_USER
-from config import DB_HOST
 from config import DB_PORT
 from config import DB_NAME
 from config import DB_PASS
