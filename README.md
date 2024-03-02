@@ -15,5 +15,9 @@
 
 # Техническая информация
 
-  - FastAPI
-  - Pydantic
+  - Фреймворк FastAPI
+  - Валидация Pydantic
+  - Кеширование Redis
+  - Миграции Alembic
+  - SQLAlchemy
+  - База данных PostgreSQL + asyncpg
